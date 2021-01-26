@@ -169,7 +169,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
      for (int k = 0; k < observations.size(); k++) {
        double obs_mx = p_x + cos(p_theta)*observations[k].x - sin(p_theta)*observations[k].y;
-       double obx_my = p_y + sin(p_theta)*observations[k].x + cos(p_theta)*observations[k].y;
+       double obs_my = p_y + sin(p_theta)*observations[k].x + cos(p_theta)*observations[k].y;
        obs_map.push_back(LandmarkObs{observations[k].id, obs_mx, obs_my});
      }
 
@@ -185,10 +185,13 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
        double observed_y = obs_map[m].y;
        int associated_predication = obs_map[m].id;
 
+       double landmark_x;
+       double landmark_y;
+
        for (int n = 0; n < lm_in_range.size(); n++) {
          if (lm_in_range[n].id == associated_predication) {
-           double landmark_x = lm_in_range[n].x;
-           double landmark_y = lm_in_range[n].y;
+           landmark_x = lm_in_range[n].x;
+           landmark_y = lm_in_range[n].y;
          }
        }
 
@@ -201,7 +204,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
        // exponent
        double exponent = (pow(observed_x - landmark_x, 2) / (2 * pow(sig_x, 2)))
-                          + (pow(observed_y - landmark_y, 2) / (2 * pow(sig-y, 2)));
+                          + (pow(observed_y - landmark_y, 2) / (2 * pow(sig_y, 2)));
 
        // calculate weight
        double weight = gauss_norm * exp(-exponent);
@@ -233,8 +236,8 @@ void ParticleFilter::resample() {
    }
 
    // create distributions
-   uniform_real_distribution<double> distDouble(0.0, maxWeight);
-   uniform_int_distribution<int> distInt(0, num_particles-1);
+   std::uniform_real_distribution<double> distDouble(0.0, maxWeight);
+   std::uniform_int_distribution<int> distInt(0, num_particles-1);
 
    // random starting index
    int index = distInt(gen);
@@ -247,7 +250,7 @@ void ParticleFilter::resample() {
        beta -= weights[index];
        index = (index + 1) / num_particles;
      }
-     resampled_particles.push_back(particles[index])
+     resampled_particles.push_back(particles[index]);
    }
    particles = resampled_particles;
 }
