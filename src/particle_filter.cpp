@@ -22,6 +22,7 @@ using std::string;
 using std::vector;
 using std::normal_distribution;
 
+
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
   /**
    * Set the number of particles. Initialize all particles to
@@ -213,12 +214,42 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 void ParticleFilter::resample() {
   /**
-   * TODO: Resample particles with replacement with probability proportional
+   * Resample particles with replacement with probability proportional
    *   to their weight.
-   * NOTE: You may find std::discrete_distribution helpful here.
-   *   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
    */
 
+   std::default_random_engine gen;
+
+   vector<Particle> resampled_particles;
+
+   vector<double> weights;
+   double maxWeight = numeric_limits<double>::min();
+
+   for (int i = 0; i < num_particles; i++) {
+     weights.push_back(particles[i].weight);
+     if (particles[i].weight > maxWeight) {
+       maxWeight = particles[i].weight;
+     }
+   }
+
+   // create distributions
+   uniform_real_distribution<double> distDouble(0.0, maxWeight);
+   uniform_int_distribution<int> distInt(0, num_particles-1);
+
+   // random starting index
+   int index = distInt(gen);
+   double beta = 0.0;
+
+   // resampling wheel
+   for (int j = 0; j < num_particles; j++) {
+     beta += distDouble(gen) * 2.0;
+     while (beta > weights[index]) {
+       beta -= weights[index];
+       index = (index + 1) / num_particles;
+     }
+     resampled_particles.push_back(particles[index])
+   }
+   particles = resampled_particles;
 }
 
 void ParticleFilter::SetAssociations(Particle& particle,
