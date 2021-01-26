@@ -41,19 +41,19 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 
   // Initialize all particles to first position
   for (int i = 0; i < num_particles; i++) {
-    Particle Particle;
-    Particle.id = i;
-    Particle.x = x;
-    Particle.y = y;
-    Particle.theta = theta;
-    Particle.weight = 1.0;
+    Particle particle;
+    particle.id = i;
+    particle.x = x;
+    particle.y = y;
+    particle.theta = theta;
+    particle.weight = 1.0;
 
     // Add random Gaussian noise
-    Particle.x += dist_x_init(gen);
-    Particle.y += dist_y_init(gen);
-    Particle.theta += dist_theta_init(gen);
+    particle.x += dist_x_init(gen);
+    particle.y += dist_y_init(gen);
+    particle.theta += dist_theta_init(gen);
 
-    particles.push_back(Particle);
+    particles.push_back(particle);
   }
 
   is_initialized = true;
