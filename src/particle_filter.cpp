@@ -105,7 +105,7 @@ void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted,
      LandmarkObs observed = observations[i];
 
      // initialize minimum distance
-     double min_dist = numeric_limits<double>::max();
+     double min_dist = std::numeric_limits<double>::max();
 
      // initialize map id
      int map_id = -1;
@@ -126,7 +126,7 @@ void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted,
      }
 
      // update observed id
-     observations[i].id = map_id
+     observations[i].id = map_id;
    }
 
 }
@@ -223,7 +223,7 @@ void ParticleFilter::resample() {
    vector<Particle> resampled_particles;
 
    vector<double> weights;
-   double maxWeight = numeric_limits<double>::min();
+   double maxWeight = std::numeric_limits<double>::min();
 
    for (int i = 0; i < num_particles; i++) {
      weights.push_back(particles[i].weight);
