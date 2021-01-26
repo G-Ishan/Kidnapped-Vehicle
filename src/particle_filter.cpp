@@ -155,7 +155,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
        // get landmark info
        float lm_x = map_landmarks.landmark_list[j].x_f;
        float lm_y = map_landmarks.landmark_list[j].y_f;
-       float lm_id = map_landmarks.landmark_list[j].id_i;
+       int lm_id = map_landmarks.landmark_list[j].id_i;
 
        // only consider landmarks within sensor range
        if (dist(lm_x, lm_y, p_x, p_y) < sensor_range) {
@@ -168,8 +168,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
      vector<LandmarkObs> obs_map;
 
      for (int k = 0; k < observations.size(); k++) {
-       double obs_mx = p_x + cos(p_theta)*observations[k].x - sin(p_theta)*observations[j].y;
-       double obx_yx = p_y + sin(p_theta)*observations[k].x + cos(p_theta)*observations[i].y;
+       double obs_mx = p_x + cos(p_theta)*observations[k].x - sin(p_theta)*observations[k].y;
+       double obx_my = p_y + sin(p_theta)*observations[k].x + cos(p_theta)*observations[k].y;
        obs_map.push_back(LandmarkObs{observations[k].id, obs_mx, obs_my});
      }
 
