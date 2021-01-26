@@ -248,7 +248,7 @@ void ParticleFilter::resample() {
      beta += distDouble(gen) * 2.0;
      while (beta > weights[index]) {
        beta -= weights[index];
-       index = (index + 1) / num_particles;
+       index = (index + 1) % num_particles;
      }
      resampled_particles.push_back(particles[index]);
    }
